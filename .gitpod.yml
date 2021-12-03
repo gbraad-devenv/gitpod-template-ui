@@ -1,4 +1,23 @@
-image: gitpod/workspace-full-vnc
+image:
+  file: ./Dockerfile
+
+experimentalNetwork: true
+
+tasks:
+  - init: >
+      ./install.sh
+  - name: tailscaled
+    command: |
+      sudo tailscaled
+  - name: tailscale
+    command: |
+      sudo -E tailscale up --hostname "gitpod-${GITPOD_WORKSPACE_ID}" \
+                           --authkey "${TAILSCALE_AUTHKEY}"
+
 ports:
   - port: 6080
     onOpen: open-preview
+
+vscode:
+  extensions:
+    - ms-vscode.Theme-TomorrowKit
